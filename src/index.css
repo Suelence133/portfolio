@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 暖色系主题变量，便于统一调整 */
+:root {
+  --color-page: #fffbf7;
+  --color-section: #fdf3ea;
+  --color-brand: #e07a5f;
+  --color-accent: #f2cc8f;
+  --color-ink: #3d3430;
+  --color-muted: #7a6b62;
+  --color-line: #f0e2d6;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-page);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 尊重系统「减少动效」偏好 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* 键盘导航时显示清晰焦点框 */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
