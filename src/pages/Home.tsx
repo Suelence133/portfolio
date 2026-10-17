@@ -10,11 +10,15 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Card from '../components/Card';
 
+/** 判断某个值是不是图片（URL 或以 / 开头的本地路径） */
+function isImageSrc(value: string): boolean {
+  return /^https?:\/\//.test(value) || value.startsWith('/');
+}
+
 /** 头像：颜色值渲染为 SVG 色块，图片路径/URL 渲染为 img */
 function Avatar({ color, name, size = 96 }: { color: string; name: string; size?: number }) {
   const initial = name.trim().charAt(0) || '·';
-  const isImage = /^https?:\/\//.test(color) || color.startsWith('/');
-  if (isImage) {
+  if (isImageSrc(color)) {
     return (
       <img
         src={color}
@@ -50,22 +54,39 @@ function Avatar({ color, name, size = 96 }: { color: string; name: string; size?
   );
 }
 
-/** 作品封面：图片路径/URL 渲染为图片，颜色值渲染为渐变色块 */
-function Cover({ color, title }: { color: string; title: string }) {
-  const isImage = /^https?:\/\//.test(color) || color.startsWith('/');
-  if (isImage) {
+/** 作品封面：图片完整显示（不裁剪），点击可放大看全图；颜色值渲染为渐变色块 */
+function Cover({
+  color,
+  title,
+  onClick,
+}: {
+  color: string;
+  title: string;
+  onClick?: () => void;
+}) {
+  if (isImageSrc(color)) {
     return (
-      <img
-        src={color}
-        alt={`${title} 的封面`}
-        className="h-36 w-full rounded-lg object-cover"
-        loading="lazy"
-      />
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={`查看「${title}」的完整图片`}
+        className="group relative block h-44 w-full cursor-zoom-in overflow-hidden rounded-lg bg-section"
+      >
+        <img
+          src={color}
+          alt={`${title} 的封面`}
+          className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+        />
+        <span className="pointer-events-none absolute bottom-2 right-2 rounded bg-ink/60 px-2 py-0.5 text-xs text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          点击看全图
+        </span>
+      </button>
     );
   }
   return (
     <div
-      className="flex h-36 items-end rounded-lg p-3"
+      className="flex h-44 items-end rounded-lg p-3"
       style={{ background: `linear-gradient(135deg, ${color} 0%, #F2CC8F 100%)` }}
       role="img"
       aria-label={`${title} 的封面`}
@@ -77,6 +98,56 @@ function Cover({ color, title }: { color: string; title: string }) {
   );
 }
 
+/** 图片放大查看：点击遮罩或按 ESC 关闭 */
+function Lightbox({
+  src,
+  title,
+  onClose,
+}: {
+  src: string;
+  title: string;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[2147483000] flex items-center justify-center bg-black/85 p-4"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${title} 完整图片`}
+    >
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="关闭"
+        className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-2xl text-white transition-colors duration-200 hover:bg-white/30"
+      >
+        ×
+      </button>
+      <img
+        src={src}
+        alt={`${title} 的完整图片`}
+        className="max-h-[85vh] max-w-full rounded-lg object-contain shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      />
+      <p className="absolute bottom-4 left-0 right-0 text-center text-sm text-white/80">{title}</p>
+    </div>
+  );
+}
+
 export default function Home() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [timeline, setTimeline] = useState<TimelineItem[]>([]);
@@ -84,6 +155,7 @@ export default function Home() {
   const [works, setWorks] = useState<Work[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
   const [copied, setCopied] = useState(false);
+  const [lightbox, setLightbox] = useState<{ src: string; title: string } | null>(null);
 
   // 进入页面时统一从接口层读取，保证后台改动能同步显示
   useEffect(() => {
@@ -216,7 +288,15 @@ export default function Home() {
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {works.map((w) => (
               <Card key={w.id} className="flex flex-col">
-                <Cover color={w.cover} title={w.title} />
+                <Cover
+                  color={w.cover}
+                  title={w.title}
+                  onClick={
+                    isImageSrc(w.cover)
+                      ? () => setLightbox({ src: w.cover, title: w.title })
+                      : undefined
+                  }
+                />
                 <h3 className="mt-4 text-base font-semibold">{w.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-6 text-muted">{w.desc}</p>
                 <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -280,6 +360,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {lightbox && (
+        <Lightbox src={lightbox.src} title={lightbox.title} onClose={() => setLightbox(null)} />
+      )}
 
       <Footer />
     </div>
