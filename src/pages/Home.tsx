@@ -50,8 +50,19 @@ function Avatar({ color, name, size = 96 }: { color: string; name: string; size?
   );
 }
 
-/** 作品封面：用 CSS 渐变色块代替图片，避免外部资源依赖 */
+/** 作品封面：图片路径/URL 渲染为图片，颜色值渲染为渐变色块 */
 function Cover({ color, title }: { color: string; title: string }) {
+  const isImage = /^https?:\/\//.test(color) || color.startsWith('/');
+  if (isImage) {
+    return (
+      <img
+        src={color}
+        alt={`${title} 的封面`}
+        className="h-36 w-full rounded-lg object-cover"
+        loading="lazy"
+      />
+    );
+  }
   return (
     <div
       className="flex h-36 items-end rounded-lg p-3"

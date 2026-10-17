@@ -45,18 +45,18 @@ export const defaultTimeline: TimelineItem[] = [
 ];
 
 export const defaultSkills: Skill[] = [
-  { id: 'sk-1', name: 'Java', category: '专业', level: 70 },
-  { id: 'sk-2', name: 'C++', category: '专业', level: 65 },
-  { id: 'sk-3', name: 'Android 开发', category: '专业', level: 68 },
-  { id: 'sk-4', name: 'SQL', category: '专业', level: 62 },
-  { id: 'sk-5', name: 'Office 办公软件', category: '专业', level: 82 },
-  { id: 'sk-6', name: '英语（四六级）', category: '专业', level: 78 },
+  { id: 'sk-1', name: 'Java', category: '专业', level: 75 },
+  { id: 'sk-2', name: 'C++', category: '专业', level: 70 },
+  { id: 'sk-3', name: 'Android 开发', category: '专业', level: 80 },
+  { id: 'sk-4', name: 'SQL', category: '专业', level: 80 },
+  { id: 'sk-5', name: 'Office 办公软件', category: '专业', level: 85 },
+  { id: 'sk-6', name: '英语（四六级）', category: '专业', level: 80 },
   { id: 'sk-7', name: '剪辑', category: '工具', level: 65 },
   { id: 'sk-8', name: '墨刀', category: '工具', level: 75 },
   { id: 'sk-9', name: 'Xmind', category: '工具', level: 80 },
-  { id: 'sk-10', name: 'Axure', category: '工具', level: 72 },
+  { id: 'sk-10', name: 'Axure', category: '工具', level: 80 },
   { id: 'sk-11', name: '阅读', category: '兴趣', level: 88 },
-  { id: 'sk-12', name: '钩织 / 针织', category: '兴趣', level: 85 },
+  { id: 'sk-12', name: '钩织 / 针织', category: '兴趣', level: 95 },
   { id: 'sk-13', name: '手账 / 日记', category: '兴趣', level: 80 },
   { id: 'sk-14', name: '追剧 / 看电影', category: '兴趣', level: 90 },
 ];
@@ -67,7 +67,7 @@ export const defaultWorks: Work[] = [
     title: '追剧清单',
     desc: '《还珠格格》《情深深雨蒙蒙》《绝望的主妇》《致命女人》《绝命毒师》《风骚律师》——反复重看的那几部。',
     tags: ['追剧', '日常'],
-    cover: '#E07A5F',
+    cover: '/work-huanzhugege.jpg',
     date: '2026-09',
   },
   {
@@ -75,7 +75,7 @@ export const defaultWorks: Work[] = [
     title: 'KPL 观赛记录',
     desc: '主队重庆狼队。记下每一场看得心跳加速的比赛和最后那波团战。',
     tags: ['电竞', 'KPL'],
-    cover: '#D9896A',
+    cover: '/work-kpl.jpg',
     date: '2026-08',
   },
   {
@@ -83,7 +83,7 @@ export const defaultWorks: Work[] = [
     title: '读过的书',
     desc: '《人性的弱点》《棋王树王孩子王》《小狗钱钱》——人文社科、小说和一点经济学。',
     tags: ['阅读', '笔记'],
-    cover: '#F2CC8F',
+    cover: '/work-book.jpg',
     date: '2026-06',
   },
   {
@@ -91,7 +91,7 @@ export const defaultWorks: Work[] = [
     title: '手工记录',
     desc: '钩织的毯子、织到一半的围巾，还有手账本里贴满的票根和照片。',
     tags: ['手工', '手账'],
-    cover: '#E8B273',
+    cover: '/work-knitting.jpg',
     date: '2026-04',
   },
 ];

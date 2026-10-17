@@ -11,7 +11,7 @@ const schema = z.object({
   title: z.string().min(1, '请输入作品标题'),
   desc: z.string().min(1, '请输入作品描述'),
   tags: z.string().min(1, '请输入至少一个标签'),
-  cover: z.string().min(1, '请选择封面颜色'),
+  cover: z.string().min(1, '请选择封面颜色或填写图片地址'),
   date: z.string().regex(/^\d{4}-\d{2}$/, '日期格式应为 YYYY-MM'),
 });
 
@@ -128,7 +128,7 @@ export default function WorksManage() {
             {errors.tags && <p className="mt-1 text-xs text-brand">{errors.tags.message}</p>}
           </div>
           <div>
-            <span className="text-sm font-medium">封面颜色</span>
+            <span className="text-sm font-medium">封面</span>
             <div className="mt-2 flex flex-wrap gap-2">
               {WARM_COLORS.map((c) => (
                 <button
@@ -144,6 +144,15 @@ export default function WorksManage() {
                 />
               ))}
             </div>
+            <input
+              {...register('cover')}
+              className={`${inputCls} mt-2`}
+              placeholder="或填写图片地址，如 /work-kpl.jpg"
+            />
+            {cover && (/^https?:\/\//.test(cover) || cover.startsWith('/')) && (
+              <img src={cover} alt="封面预览" className="mt-2 h-16 w-full rounded-lg object-cover" />
+            )}
+            {errors.cover && <p className="mt-1 text-xs text-brand">{errors.cover.message}</p>}
           </div>
         </div>
 
@@ -175,10 +184,18 @@ export default function WorksManage() {
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {list.map((w) => (
           <div key={w.id} className="rounded-xl border border-line bg-page p-4">
-            <div
-              className="h-20 rounded-lg"
-              style={{ background: `linear-gradient(135deg, ${w.cover} 0%, #F2CC8F 100%)` }}
-            />
+            {/^https?:\/\//.test(w.cover) || w.cover.startsWith('/') ? (
+              <img
+                src={w.cover}
+                alt={w.title}
+                className="h-20 w-full rounded-lg object-cover"
+              />
+            ) : (
+              <div
+                className="h-20 rounded-lg"
+                style={{ background: `linear-gradient(135deg, ${w.cover} 0%, #F2CC8F 100%)` }}
+              />
+            )}
             <h3 className="mt-3 text-sm font-semibold">{w.title}</h3>
             <p className="mt-1 line-clamp-2 text-xs text-muted">{w.desc}</p>
             <div className="mt-3 flex flex-wrap items-center gap-2">

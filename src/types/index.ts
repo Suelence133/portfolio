@@ -34,7 +34,7 @@ export interface Work {
   title: string;
   desc: string;
   tags: string[];
-  cover: string; // 封面（存色值，渲染时用 CSS 渐变色块）
+  cover: string; // 封面：可以是颜色值（渲染为渐变色块），也可以是图片 URL / 相对路径
   date: string; // YYYY-MM
 }
 
