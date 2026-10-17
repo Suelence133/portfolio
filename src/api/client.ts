@@ -9,6 +9,13 @@ import {
 
 const PREFIX = 'portfolio:';
 
+/**
+ * 默认数据版本号。
+ * 每次修改 `src/data/defaults.ts` 后递增这里，已访问过站点的浏览器会自动
+ * 用新的默认内容覆盖本地缓存，避免出现"改了代码但页面上还是旧内容"。
+ */
+const DATA_VERSION = 'v2026-10-17-3';
+
 export const STORAGE_KEYS = {
   profile: PREFIX + 'profile',
   timeline: PREFIX + 'timeline',
@@ -16,6 +23,7 @@ export const STORAGE_KEYS = {
   works: PREFIX + 'works',
   posts: PREFIX + 'posts',
   auth: PREFIX + 'auth',
+  dataVersion: PREFIX + 'dataVersion',
 } as const;
 
 /** 读取，解析失败时回退到默认值 */
@@ -49,6 +57,16 @@ export function uid(): string {
  * 只补缺失的键，避免覆盖用户已经改过的内容。
  */
 export function ensureSeed(): void {
+  // 默认数据版本变化 → 清掉本地旧内容，用新的默认数据覆盖
+  const storedVersion = localStorage.getItem(STORAGE_KEYS.dataVersion);
+  if (storedVersion !== null && storedVersion !== DATA_VERSION) {
+    remove(STORAGE_KEYS.profile);
+    remove(STORAGE_KEYS.timeline);
+    remove(STORAGE_KEYS.skills);
+    remove(STORAGE_KEYS.works);
+    remove(STORAGE_KEYS.posts);
+  }
+
   if (localStorage.getItem(STORAGE_KEYS.profile) === null) {
     write(STORAGE_KEYS.profile, defaultProfile);
   }
@@ -64,6 +82,7 @@ export function ensureSeed(): void {
   if (localStorage.getItem(STORAGE_KEYS.posts) === null) {
     write(STORAGE_KEYS.posts, defaultPosts);
   }
+  localStorage.setItem(STORAGE_KEYS.dataVersion, DATA_VERSION);
 }
 
 /** 恢复出厂数据（后台仪表盘可用） */
