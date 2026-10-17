@@ -10,9 +10,22 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Card from '../components/Card';
 
-/** 头像：不依赖外链图片，用内联 SVG 生成（底色 + 姓名首字） */
+/** 头像：颜色值渲染为 SVG 色块，图片路径/URL 渲染为 img */
 function Avatar({ color, name, size = 96 }: { color: string; name: string; size?: number }) {
   const initial = name.trim().charAt(0) || '·';
+  const isImage = /^https?:\/\//.test(color) || color.startsWith('/');
+  if (isImage) {
+    return (
+      <img
+        src={color}
+        alt={`${name} 的头像`}
+        width={size}
+        height={size}
+        className="rounded-full object-cover"
+        style={{ width: size, height: size }}
+      />
+    );
+  }
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" role="img" aria-label={`${name} 的头像`}>
       <defs>

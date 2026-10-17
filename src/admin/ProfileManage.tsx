@@ -15,7 +15,7 @@ const schema = z.object({
   location: z.string().min(1, '请输入所在地'),
   school: z.string().min(1, '请输入学校'),
   major: z.string().min(1, '请输入专业'),
-  avatar: z.string().min(1, '请选择头像颜色'),
+  avatar: z.string().min(1, '请选择头像颜色或填写图片地址'),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -128,7 +128,7 @@ export default function ProfileManage() {
         </div>
 
         <div className="mt-4">
-          <span className="text-sm font-medium">头像颜色</span>
+          <span className="text-sm font-medium">头像</span>
           <div className="mt-2 flex flex-wrap gap-2">
             {WARM_COLORS.map((c) => (
               <button
@@ -144,6 +144,20 @@ export default function ProfileManage() {
               />
             ))}
           </div>
+          <input
+            {...register('avatar')}
+            className={`${inputCls} mt-2`}
+            placeholder="或填写图片地址，如 /avatar.jpg"
+          />
+          <div className="mt-2 flex items-center gap-3">
+            <span className="text-xs text-muted">预览：</span>
+            {avatar && (/^https?:\/\//.test(avatar) || avatar.startsWith('/')) ? (
+              <img src={avatar} alt="头像预览" className="h-10 w-10 rounded-full object-cover" />
+            ) : avatar ? (
+              <div className="h-10 w-10 rounded-full" style={{ backgroundColor: avatar }} />
+            ) : null}
+          </div>
+          {errors.avatar && <p className="mt-1 text-xs text-brand">{errors.avatar.message}</p>}
         </div>
 
         <button

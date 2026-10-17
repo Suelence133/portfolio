@@ -16,7 +16,7 @@ export const defaultProfile: Profile = {
   name: '晏夙萱',
   tagline: '喜欢阅读、做手工和专注生活的天秤座女生',
   bio: '我是晏夙萱，大连海事大学软件工程专业 2027 届。课余时间大多花在看电影和读书上，也喜欢一边追剧一边钩织毯子、织围巾——手指忙着的时候，脑子反而最安静。最近在追 KPL，主队是重庆狼队。这个小站用来放我看过的片单、读过的书和做完的手工，也留给以后的自己翻。',
-  avatar: '#E07A5F',
+  avatar: '/avatar.jpg',
   email: '3252189403@qq.com',
   location: '大连',
   school: '大连海事大学',

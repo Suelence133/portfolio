@@ -5,7 +5,7 @@ export interface Profile {
   name: string; // 姓名
   tagline: string; // 一句话介绍
   bio: string; // 个人简介
-  avatar: string; // 头像（存色值，渲染时用内联 SVG 生成，避免外链图片）
+  avatar: string; // 头像：可以是颜色值（渲染为 SVG），也可以是图片 URL / 相对路径
   email: string; // 邮箱
   location: string; // 所在地
   school: string; // 学校
